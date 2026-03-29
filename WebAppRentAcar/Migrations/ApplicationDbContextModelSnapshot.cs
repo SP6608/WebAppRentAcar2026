@@ -8,7 +8,7 @@ using WebAppRentAcar.Data;
 
 #nullable disable
 
-namespace WebAppRentAcar.Data.Migrations
+namespace WebAppRentAcar.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -47,6 +47,22 @@ namespace WebAppRentAcar.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "c3c0e566-7368-4cad-b44e-b2204ec50164",
+                            ConcurrencyStamp = "c3c0e566-7368-4cad-b44e-b2204ec50164",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "4e0462e4-6314-4f40-a4e4-6c3b05e4d915",
+                            ConcurrencyStamp = "4e0462e4-6314-4f40-a4e4-6c3b05e4d915",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

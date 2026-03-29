@@ -10,15 +10,15 @@ namespace WebAppRentAcar.Data
         :base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
-        {
+        {   
+            //VagnoTyk!!!
             base.OnModelCreating(builder);
-            builder.Entity<AppUser>()
-                .HasKey(x => x.Id);
-
             builder.Entity<AppUser>()
                 .HasIndex(i => i.EGN)
                 .IsUnique();
+            builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
+        
     }
 
 }
