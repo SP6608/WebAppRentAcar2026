@@ -1,8 +1,55 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using WebAppRentAcar.ViewModels
+@model IEnumerable<CarsIndexViewModels>
+
+@{
+    ViewData["Title"] = "All Cars";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1 class="text-center mb-4">Available Cars</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        No cars available at the moment.
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var car in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@car.Brand @car.Model</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@car.Year</h6>
+
+                        <p class="card-text">
+                            <strong>Passengers:</strong> @car.Passengers
+                        </p>
+
+                        @if (!string.IsNullOrWhiteSpace(car.Description))
+                        {
+                            <p class="card-text">
+                                <strong>Description:</strong> @car.Description
+                            </p>
+                        }
+
+                        <p class="card-text">
+                            <strong>Price per day:</strong> @car.PricePerDay.ToString("F2") lv.
+                        </p>
+                    </div>
+
+                    <div class="card-footer bg-white border-0">
+                        <a asp-controller="Cars"
+                           asp-action="Details"
+                           asp-route-id="@car.Id"
+                           class="btn btn-primary w-100">
+                            Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

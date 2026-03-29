@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebAppRentAcar.Models;
 
 namespace WebAppRentAcar.Data
 {
@@ -10,15 +11,15 @@ namespace WebAppRentAcar.Data
         :base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
-        {   
-            //VagnoTyk!!!
+        {
+            // Configure Identity entities first
             base.OnModelCreating(builder);
             builder.Entity<AppUser>()
                 .HasIndex(i => i.EGN)
                 .IsUnique();
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
-        
+        public virtual DbSet<Car> Cars { get; set; } = null!;
     }
 
 }
