@@ -24,5 +24,7 @@ namespace WebAppRentAcar.Models
         [Column(TypeName = "decimal(18,2)")]
         [Range(1,500)]
         public decimal PricePerDay { get; set; }
+        //Navigation Property-> One Car Many Reservations
+        public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

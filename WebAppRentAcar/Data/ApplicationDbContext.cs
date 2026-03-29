@@ -20,6 +20,7 @@ namespace WebAppRentAcar.Data
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
         public virtual DbSet<Car> Cars { get; set; } = null!;
+        public virtual DbSet<Reservation> Reservations { get; set; } = null!;
     }
 
 }
