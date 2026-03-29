@@ -1,0 +1,83 @@
+﻿@model IEnumerable<WebAppRentAcar.Models.Reservation>
+
+@{
+    ViewData["Title"] = "Reservations";
+}
+
+@if (User.IsInRole("Admin"))
+{
+    <h2 class="mb-4">All Reservations</h2>
+}
+else
+{
+    <h2 class="mb-4">My Reservations</h2>
+}
+
+@if (!Model.Any())
+{
+    <p>No reservations found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th>User</th>
+                }
+                <th>Car</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Status</th>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th>Actions</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td>@r.User.UserName</td>
+                    }
+
+                    <td>@r.Car.Brand @r.Car.Model</td>
+                    <td>@r.StartDate.ToString("dd.MM.yyyy")</td>
+                    <td>@r.EndDate.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        @if (r.IsApproved)
+                        {
+                            <span class="text-success fw-bold">Approved</span>
+                        }
+                        else
+                        {
+                            <span class="text-warning fw-bold">Pending</span>
+                        }
+                    </td>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td>
+                            @if (!r.IsApproved)
+                            {
+                                <form asp-action="Approve" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@r.Id" />
+                                    <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No actions</span>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
