@@ -16,7 +16,7 @@ namespace WebAppRentAcar
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+            builder.Services.AddDefaultIdentity<AppUser>(options => 
             { 
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireDigit = false;
@@ -25,6 +25,7 @@ namespace WebAppRentAcar
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
+                options.User.RequireUniqueEmail = true;
             })  .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
