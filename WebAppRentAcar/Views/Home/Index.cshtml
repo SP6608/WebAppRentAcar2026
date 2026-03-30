@@ -1,52 +1,24 @@
-﻿@using WebAppRentAcar.ViewModels
-@model IEnumerable<CarsIndexViewModels>
+﻿@model IEnumerable<WebAppRentAcar.Models.Car>
 
-@{
-    ViewData["Title"] = "All Cars";
-}
-
-<h1 class="text-center mb-4">Available Cars</h1>
+<h1>Available Cars</h1>
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info text-center">
-        No cars available at the moment.
-    </div>
+    <p>No cars available.</p>
 }
 else
 {
     <div class="row">
         @foreach (var car in Model)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">@car.Brand @car.Model</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">@car.Year</h6>
-
-                        <p class="card-text">
-                            <strong>Passengers:</strong> @car.Passengers
-                        </p>
-
-                        @if (!string.IsNullOrWhiteSpace(car.Description))
-                        {
-                            <p class="card-text">
-                                <strong>Description:</strong> @car.Description
-                            </p>
-                        }
-
-                        <p class="card-text">
-                            <strong>Price per day:</strong> @car.PricePerDay.ToString("F2") lv.
-                        </p>
-                    </div>
-
-                    <div class="card-footer bg-white border-0">
-                        <a asp-controller="Cars"
-                           asp-action="Details"
-                           asp-route-id="@car.Id"
-                           class="btn btn-primary w-100">
-                            Details
-                        </a>
+                        <h5>@car.Brand @car.Model</h5>
+                        <p>Year: @car.Year</p>
+                        <p>Passengers: @car.Passengers</p>
+                        <p>Price per day: @car.PricePerDay</p>
+                        <p>@car.Description</p>
                     </div>
                 </div>
             </div>
