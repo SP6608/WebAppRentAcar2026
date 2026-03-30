@@ -96,5 +96,60 @@ namespace WebAppRentAcar.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            CarsEditViewModel? model = await dbcontext
+                .Cars
+                .AsNoTracking()
+                .Where(c => c.Id == id)
+                .Select(c => new CarsEditViewModel
+                {
+                    Id = c.Id,
+                    Brand = c.Brand,
+                    Model = c.Model,
+                    Year = c.Year,
+                    Passengers = c.Passengers,
+                    Description = c.Description,
+                    PricePerDay = c.PricePerDay
+                })
+                .SingleOrDefaultAsync();
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(CarsEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            Car? car = await dbcontext.Cars.FindAsync(model.Id);
+
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            car.Brand = model.Brand;
+            car.Model = model.Model;
+            car.Year = model.Year;
+            car.Passengers = model.Passengers;
+            car.Description = model.Description;
+            car.PricePerDay = model.PricePerDay;
+
+            await dbcontext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

@@ -1,0 +1,48 @@
+﻿@model WebAppRentAcar.ViewModels.CarsEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Car";
+}
+
+<h1>Edit Car</h1>
+
+<form action="/Cars/Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label for="Brand" class="form-label">Brand</label>
+        <input id="Brand" name="Brand" class="form-control" value="@Model.Brand" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Model" class="form-label">Model</label>
+        <input id="Model" name="Model" class="form-control" value="@Model.Model" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Year" class="form-label">Year</label>
+        <input id="Year" name="Year" type="number" min="1950" max="2080" class="form-control" value="@Model.Year" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Passengers" class="form-label">Passengers</label>
+        <input id="Passengers" name="Passengers" type="number" min="1" max="6" class="form-control" value="@Model.Passengers" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Description" class="form-label">Description</label>
+        <textarea id="Description" name="Description" class="form-control">@Model.Description</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="PricePerDay" class="form-label">Price per day</label>
+        <input id="PricePerDay" name="PricePerDay" type="number" step="0.01" min="1" max="500" class="form-control" value="@Model.PricePerDay" />
+    </div>
+
+    <button type="submit" class="btn btn-warning">Save</button>
+    <a href="/Cars/Index" class="btn btn-secondary">Back</a>
+</form>
