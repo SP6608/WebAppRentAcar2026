@@ -126,30 +126,30 @@ namespace WebAppRentAcar.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CarsEditViewModel model)
+        public async Task<IActionResult> Edit(CarsEditViewModel mode)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(mode);
             }
 
-            Car? car = await dbcontext.Cars.FindAsync(model.Id);
+            Car? car = await dbcontext.Cars.FindAsync(mode.Id);
 
             if (car == null)
             {
                 return NotFound();
             }
 
-            car.Brand = model.Brand;
-            car.Model = model.Model;
-            car.Year = model.Year;
-            car.Passengers = model.Passengers;
-            car.Description = model.Description;
-            car.PricePerDay = model.PricePerDay;
+            car.Brand = mode.Brand;
+            car.Model = mode.Model;
+            car.Year = mode.Year;
+            car.Passengers = mode.Passengers;
+            car.Description = mode.Description;
+            car.PricePerDay = mode.PricePerDay;
 
             await dbcontext.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
     }
 }

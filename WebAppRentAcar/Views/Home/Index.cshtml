@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebAppRentAcar.Models.Car>
+﻿@model IEnumerable<Car>
 
 <h1>Available Cars</h1>
 
@@ -19,6 +19,26 @@ else
                         <p>Passengers: @car.Passengers</p>
                         <p>Price per day: @car.PricePerDay</p>
                         <p>@car.Description</p>
+
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <a asp-controller="Reservations"
+                               asp-action="Create"
+                               asp-route-carId="@car.Id"
+                               class="btn btn-success btn-sm">
+                                Reservation
+                            </a>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Cars"
+                               asp-action="Edit"
+                               asp-route-id="@car.Id"
+                               class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+                        }
                     </div>
                 </div>
             </div>
