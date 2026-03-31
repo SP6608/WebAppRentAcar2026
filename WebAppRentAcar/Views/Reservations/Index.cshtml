@@ -30,10 +30,7 @@ else
                 <th>Start</th>
                 <th>End</th>
                 <th>Status</th>
-                @if (User.IsInRole("Admin"))
-                {
-                    <th>Actions</th>
-                }
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -59,9 +56,9 @@ else
                         }
                     </td>
 
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <td>
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
                             @if (!r.IsApproved)
                             {
                                 <form asp-action="Approve" method="post" style="display:inline;">
@@ -70,12 +67,29 @@ else
                                     <button type="submit" class="btn btn-sm btn-success">Approve</button>
                                 </form>
                             }
+
+                            <a asp-action="Delete"
+                               asp-route-id="@r.Id"
+                               class="btn btn-sm btn-danger">
+                                Delete
+                            </a>
+                        }
+                        else
+                        {
+                            @if (!r.IsApproved)
+                            {
+                                <a asp-action="Delete"
+                                   asp-route-id="@r.Id"
+                                   class="btn btn-sm btn-danger">
+                                    Delete
+                                </a>
+                            }
                             else
                             {
                                 <span class="text-muted">No actions</span>
                             }
-                        </td>
-                    }
+                        }
+                    </td>
                 </tr>
             }
         </tbody>

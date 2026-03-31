@@ -151,5 +151,49 @@ namespace WebAppRentAcar.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            CarsDeleteViewModel? model = await dbcontext.Cars
+                .AsNoTracking()
+                .Where(c => c.Id == id)
+                .Select(c => new CarsDeleteViewModel
+                {
+                    Id = c.Id,
+                    Brand = c.Brand,
+                    Model = c.Model,
+                    Year = c.Year,
+                    Passengers = c.Passengers,
+                    PricePerDay = c.PricePerDay,
+                    Description = c.Description
+                })
+                .SingleOrDefaultAsync();
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(CarsDeleteViewModel models)
+        {
+            Car? car = await dbcontext.Cars.FindAsync(models.Id);
+
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            dbcontext.Cars.Remove(car);
+            await dbcontext.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

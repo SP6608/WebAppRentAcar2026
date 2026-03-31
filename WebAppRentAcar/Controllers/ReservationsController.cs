@@ -150,6 +150,86 @@ namespace WebAppRentAcar.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var reservation = await dbcontext.Reservations
+                .AsNoTracking()
+                .Include(r => r.Car)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+
+            bool isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && reservation.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            if (!isAdmin && reservation.IsApproved)
+            {
+                return Forbid();
+            }
+
+            var model = new ReservationDeleteViewModel
+            {
+                Id = reservation.Id,
+                CarId = reservation.CarId,
+                CarName = $"{reservation.Car.Brand} {reservation.Car.Model}",
+                StartDate = reservation.StartDate,
+                EndDate = reservation.EndDate,
+                IsApproved = reservation.IsApproved
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(ReservationDeleteViewModel model)
+        {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var reservation = await dbcontext.Reservations.FindAsync(model.Id);
+
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+
+            bool isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && reservation.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            if (!isAdmin && reservation.IsApproved)
+            {
+                return Forbid();
+            }
+
+            dbcontext.Reservations.Remove(reservation);
+            await dbcontext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
 
         private async Task PopulateCarsAsync(ReservationCreateViewModel model)
         {
